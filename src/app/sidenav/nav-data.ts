@@ -4,7 +4,7 @@ export const navbarData = [
     {
         routeLink: 'dashboard',
         icon: faHouse,
-        label: 'Dashboard'
+        label: 'หน้าแรก'
     },
     // {
     //     routeLink: 'table',
@@ -14,16 +14,16 @@ export const navbarData = [
     {
         routeLink: 'patients',
         icon: faUser,
-        label: 'Patients'
+        label: 'ผู้ป่วย'
     },
     {
         routeLink: 'nurses',
         icon: faFemale,
-        label: 'Nurses'
+        label: 'พยาบาล'
     },
     {
         routeLink: 'signout',
         icon: faSignOut,
-        label: 'Logout'
+        label: 'ออกจากระบบ'
     },
 ];

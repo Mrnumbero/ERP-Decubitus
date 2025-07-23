@@ -1,22 +1,25 @@
 <div class="sidenav" [ngClass]="collapsed ? 'sidenav-collapsed': ''">
     <div class="Logo-container">
-        <button class="Logo" (click)="toggleCollapse()">a
+        <button class="Logo" (click)="toggleCollapse()">
+            <img src="/assets/decubitus_flower-92x92.svg" alt="Decubitus Flower" class="logo-img">
         </button>
-        <div class="Logo-text" *ngIf="collapsed">DECUBITUS</div>
+        <div class="Logo-text" @fadeInOut *ngIf="collapsed">DECUBITUS</div>
         <button class="btn-close" *ngIf="collapsed" (click)="closeSidenav()">
-            <fa-icon [icon]="faXmark" ></fa-icon>
+            <fa-icon [icon]="faXmark"></fa-icon>
         </button>
     </div>
     <ul class="sidenav-nav">
-        <li class="sidenav-nav-item" *ngFor="let data of navData">
-            <a class="sidenav-nav-link" [routerLink]="[data.routeLink]"
+        <li class="sidenav-nav-item" *ngFor="let item of filteredNavData">
+            <a class="sidenav-nav-link" [routerLink]="[item.routeLink]"
                 routerLinkActive="active"
                 [routerLinkActiveOptions]="{exact: true}"
             >
-                <i class="sidenav-link-icon" [class]="data.icon">
-                    <fa-icon [icon]="data.icon"></fa-icon>
+                <i class="sidenav-link-icon" [class]="item.icon">
+                    <fa-icon [icon]="item.icon"></fa-icon>
                 </i>
-                <span class="sidenav-link-text" *ngIf="collapsed">{{data.label}}</span>
+                <span class="sidenav-link-text" @fadeInOut *ngIf="collapsed">
+                    {{item.label}}
+                </span>
             </a>
         </li>
     </ul>

@@ -9,7 +9,7 @@
                     class="add-button"
                     mat-flat-button (click)="addElement()">
                     <fa-icon [icon]="faPlusSquare"></fa-icon>
-                    <span class="ml-2">add</span>
+                    <span class="ml-2">เพิ่มข้อมูลพยาบาล</span>
                 </button>
             </div>
         </div>
@@ -22,17 +22,27 @@
                 <table datatable [dtOptions]="dtOptions" class="data-table">
                     <thead>
                         <tr class="table-header">
-                            <th class="table-cell">จัดการ</th>
                             <th class="table-cell">ลําดับ</th>
+                            <th class="table-cell">เลขบัตรประชาชน</th>
                             <th class="table-cell">ชื่อ</th>
                             <th class="table-cell">นามสกุล</th>
                             <th class="table-cell">เพศ</th>
                             <th class="table-cell">รูปภาพ</th>
+                            <th class="table-cell">จัดการ</th>
                         </tr>
                     </thead>
                     <tbody *ngIf="dataRow?.length != 0" class="table-body">
                         <tr *ngFor="let item of dataRow; let i = index" class="table-row">
-                            <!-- Actions Column -->
+                            <td class="table-cell text-center">{{ i + 1 }}</td>
+                            <td class="table-cell">{{ item.ssid || "-" }}</td> 
+                            <td class="table-cell text-center">{{ item.first_name || "-" }}</td>
+                            <td class="table-cell text-center">{{ item.last_name || "-" }}</td>
+                            <td class="table-cell text-center">{{ item.sex === 'Female' ? 'หญิง' : item.sex === 'Male' ? 'ชาย' : item.sex || "-" }}</td>
+                            <td class="table-cell text-center">
+                                <button mat-button class="view-button" (click)="showPicture(item.profile_image)">
+                                    <fa-icon [icon]="faFileImage"></fa-icon>
+                                </button>
+                            </td>
                             <td class="table-cell text-center">
                                 <div class="action-buttons">
                                     <!-- Edit Button -->
@@ -43,26 +53,15 @@
                     
                                     <!-- Delete Button -->
                                     <button mat-icon-button class="delete-button"
-                                        (click)="deleteElement(item.id)">
+                                        (click)="deleteElement(item.id, item.first_name, item.last_name)">
                                         <fa-icon [icon]="faTrash"></fa-icon> <!-- Bin icon -->
                                     </button>
                                 </div>
-                            </td>
-                    
-                            <!-- Other Columns -->
-                            <td class="table-cell text-center">{{ i + 1 }}</td>
-                            <td class="table-cell text-center">{{ item.first_name || "-" }}</td>
-                            <td class="table-cell text-center">{{ item.last_name || "-" }}</td>
-                            <td class="table-cell text-center">{{ item.sex || "-" }}</td>
-                            <td class="table-cell text-center">
-                                <button mat-button class="view-button" (click)="showPicture(item.profile_image)">
-                                    <fa-icon [icon]="fafileimage"></fa-icon>
-                                </button>
-                            </td>
+                            </td>                    
                         </tr>
                     </tbody>                    
                     <tbody *ngIf="dataRow?.length == 0">
-                        <td colspan="6" class="no-data-message">ไม่พบข้อมูล</td>
+                        <td colspan="7" class="no-data-message">ไม่พบข้อมูล</td>
                     </tbody>
                 </table>
             </div>

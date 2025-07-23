@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { DashboardService } from '../service/dashboard.service';
 
 
 @Component({
@@ -9,7 +10,15 @@ import { CommonModule } from '@angular/common';
   templateUrl: './patient-detail.component.html',
   styleUrls: ['./patient-detail.component.scss']
 })
-export class PatientDetailComponent {
+export class PatientDetailComponent implements OnInit{
+  constructor(private DashboardService:DashboardService) { }
+  ngOnInit(): void {
+      this.DashboardService.getBottomWidgets().subscribe((response: any) => {
+        console.log(response);
+        
+        this.transactions = response;
+      });
+  }
   transactions = [
     {
       id: 1,

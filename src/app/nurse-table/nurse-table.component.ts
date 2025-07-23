@@ -1,16 +1,17 @@
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { DataTableDirective, DataTablesModule } from 'angular-datatables';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { PatientService } from '../service/patient.service';
+import { MatIconModule } from '@angular/material/icon';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faFileImage, faPen, faPlusSquare, faTrash, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { DataTableDirective, DataTablesModule } from 'angular-datatables';
 import { Config } from 'datatables.net';
 import { Subject } from 'rxjs';
 import { PictureComponent } from '../picture/picture.component';
-import { faXmark ,faFileImage,faPen,faTrash, faPlusSquare} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NurseService } from '../service/nurse.service';
 import { FormComponent } from './form/form.component';
+import { EditNurseComponent } from './edit-nurse/edit-nurse.component';
+import { DeleteNurseComponent } from './delete-nurse/delete-nurse.component';
 
 
 @Component({
@@ -30,13 +31,17 @@ import { FormComponent } from './form/form.component';
 export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
   constructor
   (
-    private _patientService: PatientService,
+    private _nurseService: NurseService,
     private _changeDetectorRef: ChangeDetectorRef,
     private dialog: MatDialog,
   ) { }
-  fafileimage= faFileImage;
+
+  faFileImage = faFileImage;
   faXmark = faXmark;
-  faPlusSquare = faPlusSquare
+  faPlusSquare = faPlusSquare;
+  faPen = faPen;
+  faTrash = faTrash;
+
   dtOptions: Config = {};
   dtTrigger: Subject<any> = new Subject();
   @ViewChild(DataTableDirective)
@@ -49,37 +54,6 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
     this.loadTable();
   }
 
-  showPicture(imgObject: any): void {
-    this.dialog
-      .open(PictureComponent, {
-        width: 'auto',
-        height: 'auto',
-        disableClose: true,
-        data: {
-          imgSelected: imgObject,
-        },
-        panelClass: 'picture-dialog',
-      })
-      .afterClosed()
-      .subscribe(() => {
-
-      });
-  }
-
-  addElement() {
-    const dialogRef = this.dialog.open(FormComponent, {
-      width: '800px',
-      height: 'auto',
-      disableClose: true,
-
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-        
-        this.rerender();
-    });
-  }
-
   pages = { current_page: 1, last_page: 1, per_page: 10, begin: 0 };
 
   loadTable(): void {
@@ -90,11 +64,12 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
       pageLength: 10,
       serverSide: true,
       processing: true,
+      ordering: false,
       language: {
         url: this.languageUrl,
       },
       ajax: (dataTablesParameters: any, callback) => {
-        that._patientService
+        that._nurseService
           .getPage(dataTablesParameters)
           .subscribe((resp: any) => {
             console.log(resp);
@@ -132,23 +107,57 @@ export class NurseTableComponent implements AfterViewInit, OnDestroy, OnInit{
   }
 
   rerender(): void {
-    if (this.dtElement.dtInstance) {
-      this.dtElement.dtInstance.then((dtInstance) => {
-        dtInstance.ajax.reload();
-      });
-    } else {
-      // If DataTables instance is not ready, reinitialize
-      this.dtTrigger.next(null);
-    }
+    this.loadTable();
+    this.dtElement.dtInstance.then((dtInstance) => {
+      dtInstance.ajax.reload();
+    });
   }
 
-  faPen = faPen;  
+  showPicture(imgObject: any): void {
+    this.dialog.open(PictureComponent, {
+      width: 'auto',
+      height: 'auto',
+      disableClose: true,
+      data: { imgSelected: imgObject },
+      panelClass: 'picture-dialog',
+    });
+  }
+
+  addElement() {
+    const dialogRef = this.dialog.open(FormComponent, {
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe(() => this.rerender());
+  }
+
   editElement(id: number) {
-    console.log('Edit user with ID:', id);
+    this.dialog.open(EditNurseComponent, {
+      width: '800px',
+      height: 'auto',
+      disableClose: true,
+      data: { id: id },
+    });
   }
 
-  faTrash = faTrash;
-  deleteElement(id: number) {
-    console.log('Delete user with ID:', id);
+  deleteElement(id: number, firstName: string, lastName: string) {
+    const dialogRef = this.dialog.open(DeleteNurseComponent, {
+      width: '350px',
+      disableClose: true,
+      data: { 
+        message: `คุณต้องการลบพยาบาลชื่อ ${firstName} ${lastName} หรือไม่`, 
+        id: id,
+        firstName: firstName,
+        lastName: lastName
+      },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Deleting item with ID:', id);
+      } else {
+        console.log('Deletion canceled');
+      }
+    });
   }
 }

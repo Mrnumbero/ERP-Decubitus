@@ -1,75 +1,88 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
+import { DashboardService } from '../service/dashboard.service';
+import { ChangeDetectorRef } from '@angular/core';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-patient-numbers',
   standalone: true,
-  imports: [HighchartsChartModule],
-  template: `<highcharts-chart 
-    [Highcharts]="Highcharts" 
-    [options]="chartOptions"
-    style="width: 100%; height: 400px; display: block;">
-  </highcharts-chart>`,
+  imports: [HighchartsChartModule, NgIf],
+  template: `<div *ngIf="chartOptions">
+    <highcharts-chart 
+      [Highcharts]="Highcharts" 
+      [options]="chartOptions"
+      style="width: 100%; height: 400px; display: block;">
+    </highcharts-chart>
+  </div>`,
   styleUrls: ['./patient-numbers.component.scss']
 })
-export class PatientNumbersComponent {
+export class PatientNumbersComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;
-  
-  chartOptions: Highcharts.Options = {
-    chart: {
-      type: 'line',
-      height: 325
-    },
-    title: {
-      text: 'จำนวนแผลแต่ละระดับ'
-    },
-    xAxis: {
-      categories: [
-        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-      ]
-    },
-    yAxis: {
-      title: {
-        text: ''
-      }
-    },
-    series: [
-      {
-        name: "แผลกดทับระดับที่ 1",
-        type: "line",
-        color: '#FF0000',
-        data: [70, 69, 95, 145, 182, 215, 252, 265, 233, 183, 139, 196]
-      },
-      {
-        name: 'แผลกดทับระดับที่ 2',
-        type: 'line',
-        color: '#DC143C',
-        data: [47, 52, 44, 35, 58, 69, 32, 53, 71, 82, 99, 159]
-      },
-      {
-        name: 'แผลกดทับระดับที่ 3',
-        type: 'line',
-        color: '#800000',
-        data: [17, 22, 14, 25, 18, 19, 22, 43, 11, 32, 29, 59]
-      },
-      {
-        name: 'แผลกดทับระดับที่ 4',
-        type: 'line',
-        color: '#FF2400',
-        data: [98, 67, 5, 27, 14, 89, 53, 41, 74, 67, 79, 47]
-      },
-      {
-        name: 'แผลหายแล้ว',
-        type: 'line',
-        color: '#008000',
-        data: [10, 18, 63, 5, 25, 84, 97, 81, 50, 70, 23, 42]
-      }
-    ],
-    credits: {
-      enabled: false
-    }
-  };
+  chartOptions!: Highcharts.Options;
+
+  constructor(private dashboardService: DashboardService, private cdr: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.dashboardService.getMiddleWidgets().subscribe((response: any) => {
+
+      setTimeout(() => { // Add a small delay to ensure change detection
+        this.chartOptions = {
+          chart: { 
+            type: 'line', 
+            height: 325,
+            style: {
+              fontFamily: 'Anuphan, sans-serif' // Change font for the entire chart
+            }
+          },
+          title: { 
+            text: 'จำนวนแผลแต่ละระดับ',
+            style: {
+              fontFamily: 'Anuphan, sans-serif' // Change font for the title
+            }
+          },
+          xAxis: { 
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            labels: {
+              style: {
+                fontFamily: 'Anuphan, sans-serif' // Change font for the xAxis labels
+              }
+            }
+          },
+          yAxis: { 
+            title: { 
+              text: '',
+              style: {
+                fontFamily: 'Anuphan, sans-serif' // Change font for the yAxis title
+              }
+            },
+            labels: {
+              style: {
+                fontFamily: 'Anuphan, sans-serif' // Change font for the yAxis labels
+              }
+            }
+          },
+          series: response.map((series: any, index: number) => ({
+            ...series,
+            color: ['#ffc080', '#ff9a34', '#ff0000', '#b30000', '#ef4444'][index] // Custom colors for each series
+          })),
+          credits: { enabled: false },
+          legend: {
+            itemStyle: {
+              fontFamily: 'Anuphan, sans-serif' // Change font for the legend
+            }
+          },
+          tooltip: {
+            style: {
+              fontFamily: 'Anuphan, sans-serif' // Change font for the tooltip
+            }
+          }
+        };
+
+        this.cdr.detectChanges(); // Trigger Angular change detection
+
+      }, 100);
+    });
+  }
 }

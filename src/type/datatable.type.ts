@@ -1,18 +1,20 @@
 export interface DataTablesResponse {
-    current_page: number;
-    data: any[];
-    first_page_url: string;
-    from: number;
-    last_page: number;
-    per_page: number;
-    to: number;
-    total: number;
-    meta: {
-        itemsPerPage: number;
-        totalItems: number;
-        currentPage: number;
-        totalPages: number;
-        sortBy: [];
-        filter: {};
+    draw: number;
+    start: number;
+    length: number;
+    search: {
+        value: string;
+        regex: boolean;
     };
+    order: { column: number; dir: string }[];
+    columns: {
+        data: string;
+        name: string;
+        searchable: boolean;
+        orderable: boolean;
+        search: {
+            value: string;
+            regex: boolean;
+        };
+    }[];
 }

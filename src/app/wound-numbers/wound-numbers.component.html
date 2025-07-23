@@ -1,8 +1,5 @@
-<div class="chart-container">
-    <highcharts-chart
-      [Highcharts]="chart"
-      [options]="chartOptions"
-      style="width: 100%; height: 400px; display: block;">
-    </highcharts-chart>
-    <p class="total-text">จำนวนผู้ป่วยทั้งหมด : {{ getTotal() }} คน</p>
-    </div>
+<div *ngIf="chartOptions.series" class="chart-container">
+  <highcharts-chart [Highcharts]="chart" [options]="chartOptions" style="width: 100%; height: 400px; display: block;">
+  </highcharts-chart>
+  <p class="total-text">จำนวนแผลทั้งหมด : {{ getTotal() }} แผล</p>
+</div>

@@ -9,8 +9,8 @@
       text-align: center;
       color: #333333;
       font-size: 18px;
-      font-family: "Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica,
-        sans-serif;
+      font-family: 'Anuphan', sans-serif;
+      font-weight: bold;
     }
     .transaction {
       display: flex;
@@ -30,22 +30,26 @@
         font-size: 16px;
         flex: 1;
         min-width: 0;
+        font-family: 'Anuphan', sans-serif;
       }
       .position {
         padding: 10px;
         font-size: 16px;
         flex: 0 0 400px;
         min-width: 0;
+        font-family: 'Anuphan', sans-serif;
       }
-      .shop-location {
+      .wound-location {
         padding: 10px;
         font-size: 16px;
         flex: 1;
         min-width: 0;
+        font-family: 'Anuphan', sans-serif;
         .wound {
           margin-top: 4px;
           font-size: 14px;
           color: grey;
+          font-family: 'Anuphan', sans-serif;
         }
       }
       .status {
@@ -55,6 +59,7 @@
         font-weight: bold;
         flex: 0 0 300px;
         min-width: 0;
+        font-family: 'Anuphan', sans-serif;
         &.confirmed {
           color: #20fb2e;
         }

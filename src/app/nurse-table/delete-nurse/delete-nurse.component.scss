@@ -1,0 +1,93 @@
+// Import the color theme variables
+$primary-color: #0BAB7C; // Primary button color
+$secondary-color: #C7F4C2;
+$tertiary-color: #A3E3B8;
+$error-color: #E87001; // Error color (used for "warn" button)
+
+$background-light: #FFFDEF; // Background Color 1
+$background-alt: #FFFDF9; // Background Color 2
+$dark-color: #151921; // Dark text color
+
+$grey-light: #ECECEC;
+$grey-mid: #D9D9D9;
+$grey-dark: #818286;
+
+// Dialog styles
+.mat-dialog-container {
+  background-color: $background-light;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  min-width: 320px;
+  max-width: 400px;
+  font-family: 'Anuphan', sans-serif; // Apply the Anuphan font to the dialog container
+
+  h2.mat-dialog-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: $dark-color;
+    margin-bottom: 12px;
+    font-family: 'Anuphan', sans-serif; // Apply the Anuphan font to the dialog title
+  }
+
+  mat-dialog-content {
+    font-size: 1rem;
+    color: $grey-dark;
+    padding: 8px 0;
+  }
+
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+
+    button {
+      padding: 8px 16px;
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      font-family: 'Anuphan', sans-serif; // Apply the Anuphan font to the buttons
+
+      &:first-child {
+        background-color: $grey-mid;
+        color: $dark-color;
+
+        &:hover {
+          background-color: darken($grey-mid, 10%);
+        }
+      }
+
+      &:last-child {
+        background-color: $error-color;
+        color: #ffffff;
+
+        &:hover {
+          background-color: darken($error-color, 10%);
+        }
+      }
+    }
+  }
+}
+
+.custom-dialog-title {
+  font-family: 'Anuphan', sans-serif; // Change to your desired font
+  font-size: 1.5rem; // Adjust font size as needed
+  font-weight: bold; // Adjust font weight as needed
+}
+
+.custom-dialog-content {
+  font-family: 'Anuphan', sans-serif; // Change to your desired font
+  font-size: 1rem; // Adjust font size as needed
+}
+
+.custom-dialog-actions {
+  font-family: 'Anuphan', sans-serif; // Change to your desired font
+  font-size: 1rem; // Adjust font size as needed
+}
+
+.custom-button {
+  font-family: 'Anuphan', sans-serif; // Change to your desired font
+  font-size: 1rem; // Adjust font size as needed
+}

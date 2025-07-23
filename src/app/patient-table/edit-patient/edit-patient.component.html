@@ -1,1 +1,94 @@
-<p>edit-patient works!</p>
+<div class="form-container">
+    <!-- Image Upload Section -->
+    <div class="image-upload-section">
+        <h2>{{ isEdit ? 'แก้ไขข้อมูลผู้ป่วย' : 'เพิ่มข้อมูลผู้ป่วย' }}</h2>
+        <div class="image-preview">
+            <img *ngIf="imagePreview" [src]="imagePreview">
+            <fa-icon *ngIf="!imagePreview" [icon]="faFileImage"></fa-icon>
+        </div>
+        <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()">
+            <fa-icon [icon]="faFileImage"></fa-icon>
+            อัพโหลดรูปภาพ
+        </button>
+        <input #fileInput type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*">
+    </div>
+
+    <!-- Form Section -->
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 md:grid-cols-2">
+            <mat-form-field class="w-full">
+                <mat-label>เลขบัตรประชาชน</mat-label>
+                <input matInput formControlName="ssid" placeholder="กรอกเลขบัตรประชาชน">
+                <mat-error *ngIf="patientForm.get('ssid')?.hasError('required')">
+                    กรุณากรอกเลขบัตรประชาชน
+                </mat-error>
+                <mat-error *ngIf="patientForm.get('ssid')?.hasError('invalidSsid')">
+                    {{ patientForm.get('ssid')?.getError('invalidSsid') }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>เพศ</mat-label>
+                <mat-select formControlName="sex">
+                    <mat-option [value]="'Male'">ชาย</mat-option>
+                    <mat-option [value]="'Female'">หญิง</mat-option>
+                </mat-select>
+                <mat-error *ngIf="patientForm.get('sex')?.hasError('required')">
+                    กรุณาเลือกเพศ
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>เบอร์โทร</mat-label>
+                <input matInput type="text" formControlName="phone" placeholder="กรอกเบอร์โทร">
+                <mat-error *ngIf="patientForm.get('phone')?.hasError('required')">
+                    กรุณากรอกเบอร์โทร
+                </mat-error>
+                <mat-error *ngIf="patientForm.get('phone')?.hasError('invalidPhone')">
+                    {{ patientForm.get('phone')?.getError('invalidPhone') }}
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>ชื่อ</mat-label>
+                <input matInput type="text" formControlName="first_name" placeholder="กรอกชื่อต้น">
+                <mat-error *ngIf="patientForm.get('first_name')?.hasError('required')">
+                    กรุณากรอกชื่อ
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>นามสกุล</mat-label>
+                <input matInput type="text" formControlName="last_name" placeholder="กรอกชื่อท้าย">
+                <mat-error *ngIf="patientForm.get('last_name')?.hasError('required')">
+                    กรุณากรอกนามสกุล
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="date-picker-field">
+                <mat-label>วันที่</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="birthdate">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>รหัสผ่าน</mat-label>
+                <input matInput type="password" formControlName="password" placeholder="กรอกรหัสผ่าน">
+                <mat-error *ngIf="patientForm.get('password')?.hasError('required')">
+                    กรุณากรอกรหัสผ่าน
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <button type="button" mat-stroked-button color="warn" (click)="dialogRef.close()">
+                ยกเลิก
+            </button>
+            <button type="submit" mat-flat-button color="primary" [disabled]="patientForm.invalid">
+                {{ isEdit ? 'บันทึกการแก้ไข' : 'บันทึก' }}
+            </button>
+        </div>
+    </form>
+</div>

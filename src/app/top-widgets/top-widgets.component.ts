@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import {
   faLocation,
@@ -6,6 +6,7 @@ import {
   faBoxes,
   faMoneyBill,
 } from '@fortawesome/free-solid-svg-icons';
+import { DashboardService } from '../service/dashboard.service';
 
 @Component({
   selector: 'app-top-widgets',
@@ -14,12 +15,27 @@ import {
   templateUrl: './top-widgets.component.html',
   styleUrls: ['./top-widgets.component.scss']
 })
-export class TopWidgetsComponent {
+export class TopWidgetsComponent implements OnInit{
   faLocation = faLocation;
   faShop = faShop;
   faBoxes = faBoxes;
   faMoneyBill = faMoneyBill;
 
-  constructor() { }
+  countpatients: number = 0;
+  countpatientsinNurse: number = 0;
+  countpatientsoutNurse: number = 0;
+
+  constructor(
+    private DashboardService: DashboardService,
+  ) { }
+
+  ngOnInit() {
+    this.DashboardService.getTopWidgets().subscribe((response: any) => {
+      console.log(response);
+      this.countpatients = response.countpatient;
+      this.countpatientsinNurse = response.countpatientInNurse;
+      this.countpatientsoutNurse = response.countpatientOutNurse;
+    });
+  }
 
 }

@@ -1,31 +1,29 @@
-<div class="p-6 bg-white rounded-lg shadow-md">
+<div class="form-container">
     <!-- Image Upload Section -->
-    <div class="flex flex-col items-center mb-6">
-        <h2 class="text-2xl font-semibold text-blue-600 mb-4">
-            {{ isEdit ? 'แก้ไขข้อมูลผู้ป่วย' : 'เพิ่มข้อมูลผู้ป่วย' }}
-        </h2>
-        <div class="w-48 h-48 mb-4 rounded-lg bg-blue-50 flex items-center justify-center overflow-hidden">
-            <img *ngIf="imagePreview" [src]="imagePreview" class="w-full h-full object-cover">
-            <fa-icon [icon]="faFileImage" *ngIf="!imagePreview" class="text-blue-400" style="width: 48px; height: 48px; font-size: 48px">
-                image
-            </fa-icon>
+    <div class="image-upload-section">
+        <h2>{{ isEdit ? 'แก้ไขข้อมูลพยาบาล' : 'เพิ่มข้อมูลพยาบาล' }}</h2>
+        <div class="image-preview">
+            <img *ngIf="imagePreview" [src]="imagePreview">
+            <fa-icon *ngIf="!imagePreview" [icon]="faFileImage"></fa-icon>
         </div>
         <button type="button" mat-stroked-button color="primary" (click)="fileInput.click()">
-            <fa-icon [icon]="faFileImage" class="mr-2"></fa-icon>
+            <fa-icon [icon]="faFileImage"></fa-icon>
             อัพโหลดรูปภาพ
         </button>
         <input #fileInput type="file" class="hidden" (change)="onFileSelected($event)" accept="image/*">
     </div>
 
     <!-- Form Section -->
-    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="space-y-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
+    <form [formGroup]="nurseForm" (ngSubmit)="onSubmit()">
+        <div class="grid grid-cols-1 md:grid-cols-2">
             <mat-form-field class="w-full">
                 <mat-label>เลขบัตรประชาชน</mat-label>
                 <input matInput formControlName="ssid" placeholder="กรอกเลขบัตรประชาชน">
-                <mat-error *ngIf="patientForm.get('ssid')?.hasError('required')">
+                <mat-error *ngIf="nurseForm.get('ssid')?.hasError('required')">
                     กรุณากรอกเลขบัตรประชาชน
+                </mat-error>
+                <mat-error *ngIf="nurseForm.get('ssid')?.hasError('invalidSsid')">
+                    {{ nurseForm.get('ssid')?.getError('invalidSsid') }}
                 </mat-error>
             </mat-form-field>
 
@@ -35,31 +33,34 @@
                     <mat-option [value]="'Male'">ชาย</mat-option>
                     <mat-option [value]="'Female'">หญิง</mat-option>
                 </mat-select>
-                <mat-error *ngIf="patientForm.get('sex')?.hasError('required')">
+                <mat-error *ngIf="nurseForm.get('sex')?.hasError('required')">
                     กรุณาเลือกเพศ
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field class="w-full">
                 <mat-label>เบอร์โทร</mat-label>
-                <input matInput type="string" formControlName="phone" placeholder="กรอกเบอร์โทร">
-                <mat-error *ngIf="patientForm.get('phone')?.hasError('required')">
+                <input matInput type="text" formControlName="phone" placeholder="กรอกเบอร์โทร">
+                <mat-error *ngIf="nurseForm.get('phone')?.hasError('required')">
                     กรุณากรอกเบอร์โทร
+                </mat-error>
+                <mat-error *ngIf="nurseForm.get('phone')?.hasError('invalidPhone')">
+                    {{ nurseForm.get('phone')?.getError('invalidPhone') }}
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field class="w-full">
                 <mat-label>ชื่อต้น</mat-label>
-                <input matInput type="string" formControlName="first_name" placeholder="กรอกชื่อต้น">
-                <mat-error *ngIf="patientForm.get('first_name')?.hasError('required')">
+                <input matInput type="text" formControlName="first_name" placeholder="กรอกชื่อต้น">
+                <mat-error *ngIf="nurseForm.get('first_name')?.hasError('required')">
                     กรุณากรอกชื่อต้น
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field class="w-full">
                 <mat-label>ชื่อท้าย</mat-label>
-                <input matInput type="string" formControlName="last_name" placeholder="กรอกชื่อท้าย">
-                <mat-error *ngIf="patientForm.get('last_name')?.hasError('required')">
+                <input matInput type="text" formControlName="last_name" placeholder="กรอกชื่อท้าย">
+                <mat-error *ngIf="nurseForm.get('last_name')?.hasError('required')">
                     กรุณากรอกชื่อท้าย
                 </mat-error>
             </mat-form-field>
@@ -74,18 +75,18 @@
             <mat-form-field class="w-full">
                 <mat-label>รหัสผ่าน</mat-label>
                 <input matInput type="password" formControlName="password" placeholder="กรอกรหัสผ่าน">
-                <mat-error *ngIf="patientForm.get('password')?.hasError('required')">
+                <mat-error *ngIf="nurseForm.get('password')?.hasError('required')">
                     กรุณากรอกรหัสผ่าน
                 </mat-error>
             </mat-form-field>
         </div>
 
         <!-- Action Buttons -->
-        <div class="flex justify-end space-x-4 mt-6">
+        <div class="action-buttons">
             <button type="button" mat-stroked-button color="warn" (click)="dialogRef.close()">
                 ยกเลิก
             </button>
-            <button type="submit" mat-flat-button color="primary" [disabled]="patientForm.invalid">
+            <button type="submit" mat-flat-button color="primary" [disabled]="nurseForm.invalid">
                 {{ isEdit ? 'บันทึกการแก้ไข' : 'บันทึก' }}
             </button>
         </div>

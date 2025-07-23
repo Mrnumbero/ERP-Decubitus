@@ -4,10 +4,12 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { RecoveryModalComponent } from '../recovery-modal/recovery-modal.component';
 import { AuthService } from '../service/auth.service';
 import { KeyService } from '../service/key.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -21,17 +23,21 @@ import { KeyService } from '../service/key.service';
     MatInputModule,
     MatButtonModule,
     MatDialogModule,
+    MatIconModule,
   ],
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   recoveryForm: FormGroup;
+  hidePassword: boolean = true;
+  errorMessage: string | null = null; // Add this line
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private dialog: MatDialog,
-    private _KeyService: KeyService
+    private _KeyService: KeyService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -52,7 +58,22 @@ export class LoginComponent implements OnInit{
       const data = this.loginForm.value;
       
       data.password = await this._KeyService.encryptPassword(data.password);
-      this.authService.login(data);
+      
+      this.authService.login(data).subscribe((roleId) => {
+        if (roleId === 1) {
+          this.router.navigate(['/dashboard']); // Full access
+        } else if (roleId === 3 ){
+          this.router.navigate(['/dashboard']); 
+        } else if (roleId === 2 ){
+          this.errorMessage = 'คุณไม่มีสิทธิ์เข้าใช้งาน'; 
+        } else {
+          this.errorMessage = 'เลขบัตรประชาชนหรือรหัสผ่านไม่ถูกต้อง'; // Set error message
+        }
+      },
+      (error) => {
+        console.error('Login failed', error);
+        this.errorMessage = 'เลขบัตรประชาชนหรือรหัสผ่านไม่ถูกต้อง'; // Set error message
+      });
     }
   }
 
@@ -66,5 +87,9 @@ export class LoginComponent implements OnInit{
         alert('Recovery link sent!');
       }
     });
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
   }
 }

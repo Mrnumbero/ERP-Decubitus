@@ -22,6 +22,9 @@
                 <mat-error *ngIf="patientForm.get('ssid')?.hasError('required')">
                     กรุณากรอกเลขบัตรประชาชน
                 </mat-error>
+                <mat-error *ngIf="patientForm.get('ssid')?.hasError('invalidSsid')">
+                    {{ patientForm.get('ssid')?.getError('invalidSsid') }}
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field class="w-full">
@@ -41,21 +44,24 @@
                 <mat-error *ngIf="patientForm.get('phone')?.hasError('required')">
                     กรุณากรอกเบอร์โทร
                 </mat-error>
-            </mat-form-field>
-
-            <mat-form-field class="w-full">
-                <mat-label>ชื่อต้น</mat-label>
-                <input matInput type="text" formControlName="first_name" placeholder="กรอกชื่อต้น">
-                <mat-error *ngIf="patientForm.get('first_name')?.hasError('required')">
-                    กรุณากรอกชื่อต้น
+                <mat-error *ngIf="patientForm.get('phone')?.hasError('invalidPhone')">
+                    {{ patientForm.get('phone')?.getError('invalidPhone') }}
                 </mat-error>
             </mat-form-field>
 
             <mat-form-field class="w-full">
-                <mat-label>ชื่อท้าย</mat-label>
+                <mat-label>ชื่อ</mat-label>
+                <input matInput type="text" formControlName="first_name" placeholder="กรอกชื่อต้น">
+                <mat-error *ngIf="patientForm.get('first_name')?.hasError('required')">
+                    กรุณากรอกชื่อ
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label>นามสกุล</mat-label>
                 <input matInput type="text" formControlName="last_name" placeholder="กรอกชื่อท้าย">
                 <mat-error *ngIf="patientForm.get('last_name')?.hasError('required')">
-                    กรุณากรอกชื่อท้าย
+                    กรุณากรอกนามสกุล
                 </mat-error>
             </mat-form-field>
 

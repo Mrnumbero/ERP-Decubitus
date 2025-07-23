@@ -1,6 +1,8 @@
 export const environment = {
-    baseURL: 'http://localhost:3000/api/v0',
-    ImageURL: 'http://localhost:3000/',
+    baseURL: 'https://backend.tanpy.xyz/api/v0',
+    ImageURL: 'http://backend.tanpy.xyz/',
+    // baseURL: 'http://localhost:3000/api/v0',
+    // ImageURL: 'http://localhost:3000/',
     publicKey: `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApdZ4B7OM6edHzlDT1b9B
 0iTudz5lGaTZeC5Xa6tO54G2TCgOfHjvncPFl2BbVhtUWmNn1J9TmarGB+3E/et1

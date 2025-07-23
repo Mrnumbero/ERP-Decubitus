@@ -4,7 +4,7 @@
         <fa-icon [icon]="faLocation"></fa-icon>
       </div>
       <div class="value">
-        <div class="top">100</div>
+        <div class="top">{{countpatients}}</div>
         <div class="bottom">จำนวนผู้ป่วยในระบบ</div>
       </div>
     </div>
@@ -13,7 +13,7 @@
         <fa-icon [icon]="faShop"></fa-icon>
       </div>
       <div class="value">
-        <div class="top">85</div>
+        <div class="top">{{countpatientsinNurse}}</div>
         <div class="bottom">จำนวนผู้ป่วยที่ได้รับการปรึกษาแล้ว</div>
       </div>
     </div>
@@ -22,8 +22,8 @@
           <fa-icon [icon]="faShop"></fa-icon>
         </div>
         <div class="value">
-          <div class="top">20</div>
-          <div class="bottom">จำนวนผู้ป่วยที่หายแล้ว</div>
+          <div class="top">{{countpatientsoutNurse}}</div>
+          <div class="bottom">จำนวนผู้ป่วยที่ยังไม่ได้รับการปรึกษา</div>
         </div>
       </div>
   </div>
